@@ -1,0 +1,244 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-hacker">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0f1420" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VaultPad" />
+  <title>VaultPad — Simple Mobile Vault</title>
+  <link rel="preload" href="style.css" as="style" />
+  <link rel="stylesheet" href="style.css" />
+  <noscript>VaultPad needs JavaScript to function. Please enable it.</noscript>
+</head>
+
+<body>
+  <!-- ICONS -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <defs>
+      <symbol id="ic-media" viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14"/><path d="m21 19-6-6-4 4-2-2-4 4"/><circle cx="8.5" cy="8.5" r="1.5"/></symbol>
+      <symbol id="ic-text" viewBox="0 0 24 24"><path d="M4 5h16M4 10h16M4 15h10M4 20h6"/></symbol>
+      <symbol id="ic-settings" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.07a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.07c.62-.24 1.01-.85 1.01-1.49s-.39-1.27-1.01-1.51H3a2 2 0 0 1 0-4h.07c.62-.24 1.01-.85 1.01-1.49S3.46 4.27 2.84 4.03l-.06-.06A2 2 0 1 1 5.61 1.14l.06.06c.49.49 1.2.64 1.82.33H9c.66 0 1.27-.39 1.51-1.01V0a2 2 0 0 1 4 0v.07c.24.62.85 1.01 1.49 1.01h.07c.62.31 1.33.16 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.49.49-.64 1.2-.33 1.82V6c0 .66.39 1.27 1.01 1.51H21a2 2 0 0 1 0 4h-.07c-.62.24-1.01.85-1.01 1.49z"/></symbol>
+      <symbol id="ic-add" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="ic-lock" viewBox="0 0 24 24"><path d="M17 11V8a5 5 0 0 0-10 0v3M5 11h14v10H5z"/></symbol>
+      <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="ic-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+      <symbol id="ic-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/></symbol>
+      <symbol id="ic-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></symbol>
+    </defs>
+  </svg>
+
+  <div id="app" class="app-shell" role="application" aria-label="VaultPad">
+    <header class="topbar" role="banner">
+      <h1 class="topbar-title" id="route-title">VaultPad</h1>
+    </header>
+
+    <main id="content" class="content" role="main" tabindex="-1" aria-live="polite">
+      <!-- MEDIA -->
+      <section id="tab-media" class="tab-view is-active" role="region" aria-labelledby="media-title">
+        <div class="section-header">
+          <h2 id="media-title" class="section-title">Media Vault</h2>
+          <div class="subtitle">Photos only — uploads go into Hidden Media</div>
+        </div>
+
+        <div class="action-panel">
+          <div class="action-copy">
+            <h3>Upload Photos</h3>
+            <p class="muted">Choose images and stash them in the hidden section.</p>
+          </div>
+          <div class="action-controls">
+            <input id="media-file" type="file" accept="image/*" hidden />
+            <button class="btn" id="btn-media-choose"><svg aria-hidden="true"><use href="#ic-upload"/></svg><span>Choose</span></button>
+            <button class="btn primary" id="btn-media-upload"><svg aria-hidden="true"><use href="#ic-add"/></svg><span>Upload</span></button>
+          </div>
+          <div class="action-status" id="media-queued">No files selected</div>
+        </div>
+
+        <div class="nav-card card">
+          <div class="card-head">
+            <div>
+              <div class="title">Hidden Media</div>
+              <div class="meta">Password required to view</div>
+            </div>
+            <div class="spacer"></div>
+            <button class="btn ghost" id="btn-open-hidden-media"><svg aria-hidden="true"><use href="#ic-lock"/></svg><span>Open</span></button>
+          </div>
+          <div id="hidden-media-count" class="meta">0 photo(s) stored</div>
+        </div>
+
+        <div id="media-reveal" class="reveal-area" hidden>
+          <div class="list-toolbar">
+            <div class="subtitle">Your hidden photos</div>
+            <div class="spacer"></div>
+            <button class="btn ghost sm" id="btn-close-media-reveal">Hide</button>
+          </div>
+          <div id="media-grid" class="media-grid" aria-label="Hidden photos grid"></div>
+        </div>
+      </section>
+
+      <!-- TEXT -->
+      <section id="tab-text" class="tab-view" role="region" aria-labelledby="text-title" hidden>
+        <div class="section-header">
+          <h2 id="text-title" class="section-title">Text Vault</h2>
+          <div class="subtitle">Title + note + optional link → stored in Hidden Text</div>
+        </div>
+
+        <div class="action-panel">
+          <div class="field two">
+            <label class="field-item">
+              <span>Title</span>
+              <input id="txt-title" type="text" placeholder="e.g., Server creds notes" />
+            </label>
+            <label class="field-item">
+              <span>Link (optional)</span>
+              <input id="txt-link" type="url" placeholder="https://example.com" />
+            </label>
+          </div>
+          <label class="field">
+            <span>Note</span>
+            <textarea id="txt-body" rows="6" placeholder="Add details, codes, or context…"></textarea>
+          </label>
+          <div class="row end">
+            <button class="btn primary" id="btn-text-upload"><svg aria-hidden="true"><use href="#ic-add"/></svg><span>Upload Text</span></button>
+          </div>
+        </div>
+
+        <div class="nav-card card">
+          <div class="card-head">
+            <div>
+              <div class="title">Hidden Text</div>
+              <div class="meta">Password required to view</div>
+            </div>
+            <div class="spacer"></div>
+            <button class="btn ghost" id="btn-open-hidden-text"><svg aria-hidden="true"><use href="#ic-lock"/></svg><span>Open</span></button>
+          </div>
+          <div id="hidden-text-count" class="meta">0 note(s) stored</div>
+        </div>
+
+        <div id="text-reveal" class="reveal-area" hidden>
+          <div class="list-toolbar">
+            <div class="subtitle">Your hidden notes</div>
+            <div class="spacer"></div>
+            <button class="btn ghost sm" id="btn-close-text-reveal">Hide</button>
+          </div>
+          <ul id="text-list" class="card-list" aria-label="Hidden text list"></ul>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="tab-settings" class="tab-view" role="region" aria-labelledby="settings-title" hidden>
+        <div class="section-header">
+          <h2 id="settings-title" class="section-title">Settings</h2>
+          <div class="subtitle">Security & data</div>
+        </div>
+
+        <div class="card">
+          <div class="row wrap">
+            <button class="btn" id="btn-change-pass"><svg aria-hidden="true"><use href="#ic-edit"/></svg><span>Change Password</span></button>
+            <button class="btn danger" id="btn-wipe"><svg aria-hidden="true"><use href="#ic-trash"/></svg><span>WIPE ALL DATA</span></button>
+          </div>
+        </div>
+
+        <details class="card">
+          <summary class="title">About</summary>
+          <p class="meta">VaultPad stores everything locally on this device. No servers. If you forget your password, your data cannot be recovered.</p>
+        </details>
+      </section>
+    </main>
+
+    <nav class="tabbar" role="tablist" aria-label="Primary">
+      <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-media" data-tab="media">
+        <svg aria-hidden="true"><use href="#ic-media"/></svg><span>Media</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-text" data-tab="text">
+        <svg aria-hidden="true"><use href="#ic-text"/></svg><span>Text</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-settings" data-tab="settings">
+        <svg aria-hidden="true"><use href="#ic-settings"/></svg><span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODALS -->
+  <dialog id="login-modal" class="modal" aria-labelledby="login-title" aria-modal="true">
+    <header class="modal-header">
+      <svg class="lock-icon" aria-hidden="true" style="width:20px;height:20px;opacity:.9"><use href="#ic-lock"/></svg>
+      <h3 id="login-title">Unlock Vault</h3>
+      <div class="spacer"></div>
+    </header>
+    <div class="modal-body">
+      <p class="muted small">Enter 4 – 16 number PIN</p>
+      <input id="login-pass" type="password" inputmode="numeric" maxlength="16" class="lock-input" placeholder="••••" />
+    </div>
+    <footer class="modal-footer">
+      <button class="btn primary" id="btn-login-go">Unlock</button>
+    </footer>
+  </dialog>
+
+  <dialog id="reauth-modal" class="modal" aria-labelledby="reauth-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="reauth-title">Re-enter Password</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="reauth-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <input id="reauth-pass" type="password" inputmode="numeric" maxlength="16" class="lock-input" placeholder="••••" />
+    </div>
+    <footer class="modal-footer">
+      <button class="btn primary" id="btn-reauth-go">Continue</button>
+    </footer>
+  </dialog>
+
+  <dialog id="pass-modal" class="modal" aria-labelledby="pass-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="pass-title">Change Password</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="pass-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <label class="field"><span>Current Password</span><input id="curr-pass" type="password" inputmode="numeric" maxlength="16" /></label>
+      <label class="field"><span>New Password (4–16)</span><input id="new-pass" type="password" inputmode="numeric" maxlength="16" /></label>
+      <label class="field"><span>Confirm New</span><input id="new-pass2" type="password" inputmode="numeric" maxlength="16" /></label>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn primary" id="btn-pass-apply">Apply</button>
+    </footer>
+  </dialog>
+
+  <dialog id="wipe-modal" class="modal" aria-labelledby="wipe-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="wipe-title">Delete All Data?</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="wipe-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <p>Are you sure you want to delete all data? <strong>This action cannot be undone.</strong></p>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" id="btn-wipe-cancel">Cancel</button>
+      <button class="btn danger" id="btn-wipe-confirm">Yes, delete</button>
+    </footer>
+  </dialog>
+
+    <dialog id="photo-modal" class="modal" aria-labelledby="photo-title" aria-modal="true">
+    <header class="modal-header">
+        <h3 id="photo-title">Photo</h3>
+        <div class="spacer"></div>
+        <button class="icon-btn" data-close="photo-modal" aria-label="Close">
+        <svg><use href="#ic-close"/></svg>
+        </button>
+    </header>
+
+    <div class="modal-body center">
+        <img id="photo-view" alt="Hidden media" />
+    </div>
+    </dialog>
+
+
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+  <script src="script.js" defer></script>
+</body>
+</html>
