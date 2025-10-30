@@ -1,1 +1,402 @@
+/* =========================================================
+   FocusUI — style.css (Contrast fix + modern polish)
+   - Forces text color on buttons/inputs/selects/options
+   - Ensures SVG icon strokes are visible
+   - Higher contrast primary buttons + tiles
+   ========================================================= */
 
+/* Reset */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root{
+  /* Layout */
+  --topbar-h: 56px;
+  --tabbar-h: 72px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  /* Colors */
+  --bg: #0b0f14;
+  --bg-2: #121722;
+  --surface: #161d28;
+  --glass: rgba(22,29,40,.72);
+  --border: rgba(255,255,255,0.1);
+
+  --text: #eef4ff;     /* primary text (very light) */
+  --text-2: #b6c7da;   /* secondary */
+  --muted: #8aa1b8;
+
+  --blue: #4da3ff;
+  --blue-soft: #8cc7ff;
+  --blue-glow: rgba(77,163,255,.22);
+
+  --danger: #ff5c5c;
+
+  /* Effects */
+  --shadow-1: 0 12px 32px rgba(0,0,0,.35);
+  --ring: 0 0 0 2px var(--blue-glow);
+
+  /* Motion */
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --t-1: 150ms;
+  --t-2: 240ms;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  background: radial-gradient(1200px 900px at 50% -200px, #0f1622 0%, transparent 55%) , var(--bg);
+  color:var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow:hidden;
+  color-scheme: dark;
+}
+
+/* Base + global color enforcement */
+img{ max-width:100%; display:block; border-radius:12px; }
+a, p, h1, h2, h3, h4, h5, h6, label, span, small, strong, em { color: var(--text); }
+button, input, select, textarea { color: var(--text); }
+option { color: var(--text); background: var(--surface); }
+::placeholder{ color: var(--muted); opacity: .9; }
+
+.hidden{ display:none!important; }
+.spacer{ flex:1 1 auto; }
+.center{ display:grid; place-items:center; }
+.row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.small{ font-size:.9rem; }
+.muted{ color:var(--muted); }
+
+/* Ensure inline SVG icons are visible */
+svg { display:inline-block; }
+svg *, .icon-btn svg * { stroke: var(--text); fill: none; stroke-width: 1.8; }
+
+/* App Shell */
+.app-shell{
+  min-height:100dvh;
+  display:grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--tabbar-h);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Top Bar */
+.topbar{
+  position:fixed; inset: env(safe-area-inset-top) 0 auto 0;
+  height:var(--topbar-h);
+  display:grid; place-items:center;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(14px);
+  z-index:50;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.topbar-title{ margin:0; font-weight:800; font-size:1.18rem; letter-spacing:.2px; }
+
+/* Content */
+.content{
+  grid-row:2/span 1;
+  overflow-y:auto;
+  padding:16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sections */
+.section-header{ margin-bottom:14px; }
+.section-title{ margin:0 0 4px; font-size:1.12rem; font-weight:800; }
+.subtitle{ color:var(--text-2); font-size:.95rem; }
+
+/* Cards */
+.card{
+  border-radius: var(--radius-lg);
+  border:1px solid var(--border);
+  background: var(--glass);
+  backdrop-filter: blur(14px) saturate(1.05);
+  padding:14px;
+  margin-bottom:16px;
+  box-shadow: var(--shadow-1);
+}
+.card .title{ font-weight:800; margin-bottom:4px; color:var(--text); }
+.card .meta{ color:var(--muted); }
+
+/* Action Panel */
+.action-panel{
+  border-radius: var(--radius-lg);
+  border:1px solid var(--border);
+  padding:14px;
+  background: linear-gradient(180deg, rgba(77,163,255,.08), transparent) var(--surface);
+  margin-bottom:16px;
+}
+
+/* Timer Display */
+.big-count{
+  font-size:3.8rem;
+  font-weight:800;
+  letter-spacing:1px;
+  text-align:center;
+  margin:12px 0 4px;
+  color: var(--text);
+}
+
+/* Preset Grid */
+.preset-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px,1fr));
+  gap:10px;
+}
+.preset-tile{
+  border:1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding:12px 12px;
+  text-align:center;
+  background: rgba(255,255,255,.06);
+  cursor:pointer;
+  transition: background var(--t-1) var(--ease), transform var(--t-1) var(--ease);
+  color: var(--text); /* enforce */
+}
+.preset-tile:hover{ background: rgba(255,255,255,.12); transform: translateY(-1px); }
+.preset-tile .title{ font-weight:700; color: var(--text); }
+.preset-tile .meta{ color: var(--text-2); }
+
+/* Sesh Player Cards */
+.card-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  gap:10px;
+}
+
+.player-card{
+  border:1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding:12px;
+  background: var(--glass);
+  color: var(--text);
+}
+.player-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.player-name{ font-size:1rem; font-weight:800; color: var(--text); }
+.player-count{ font-size:1.2rem; font-weight:800; color: var(--text); }
+.player-btn{
+  appearance:none;
+  border:none;
+  background: linear-gradient(180deg, var(--blue), var(--blue-soft));
+  color:#fff; /* higher contrast */
+  padding:9px 12px;
+  border-radius: var(--radius-md);
+  font-weight:800;
+  cursor:pointer;
+  transition: transform var(--t-1) var(--ease), box-shadow var(--t-1);
+}
+.player-btn:hover{ box-shadow: var(--ring); }
+.player-btn:active{ transform:scale(.96); }
+
+/* Stats Chips */
+.stat-chip{
+  background: rgba(255,255,255,.06);
+  border-radius: var(--radius-md);
+  padding:10px 14px;
+  text-align:center;
+  border:1px solid var(--border);
+  min-width:90px;
+  color: var(--text);
+}
+.stat-value{ font-weight:800; font-size:1.25rem; color: var(--text); }
+.stat-label{ font-size:.86rem; color:var(--muted); }
+
+/* Buttons */
+.btn{
+  appearance:none;
+  border:1px solid var(--border);
+  background: var(--surface);
+  color: var(--text); /* enforce */
+  padding:10px 14px;
+  border-radius: var(--radius-md);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  font-weight:700;
+  transition: background var(--t-1), transform var(--t-1), box-shadow var(--t-1), color var(--t-1);
+}
+.btn:hover{ box-shadow: var(--ring); }
+.btn:active{ transform:scale(.98); }
+
+.btn.primary{
+  background: linear-gradient(180deg, var(--blue), var(--blue-soft));
+  border-color: transparent;
+  color:#ffffff; /* switch to white for contrast */
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+.btn.ghost{
+  background:transparent;
+  color: var(--blue); /* readable */
+  border-color: var(--blue-glow);
+}
+.btn.danger{
+  background:rgba(255,92,92,.14);
+  border-color:rgba(255,92,92,.35);
+  color:#ffb0b0; /* lighter */
+}
+.btn.sm{ font-size:.86rem; padding:8px 10px; }
+
+/* Tab Bar */
+.tabbar{
+  position:fixed; bottom:0; left:0; right:0;
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display:grid; grid-template-columns: repeat(5,1fr);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(14px) saturate(1.05);
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.tab{
+  appearance:none; border:none; background:transparent;
+  color:var(--text-2);
+  display:grid; place-items:center;
+  padding:8px 0;
+}
+.tab svg{ width:22px; height:22px; }
+.tab span{ font-size:.78rem; font-weight:700; }
+.tab.is-active{ color:var(--blue); }
+.tab.is-active svg{ transform:translateY(-2px) scale(1.05); }
+
+/* Tab Views */
+.tab-view{ display:none; opacity:0; transform:translateY(8px); transition:opacity var(--t-2), transform var(--t-2); }
+.tab-view.is-active{ display:block; opacity:1; transform:translateY(0); }
+
+/* Modals */
+.modal{
+  border:none; padding:0;
+  width:min(440px,94vw);
+  background:transparent;
+}
+.modal::backdrop{
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(18px);
+}
+.modal-header,
+.modal-body,
+.modal-footer{
+  background: var(--surface);
+  border:1px solid var(--border);
+  color: var(--text);
+}
+.modal-header{
+  padding:12px 14px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display:flex; align-items:center; gap:10px;
+}
+.modal-body{ padding:14px; }
+.modal-footer{
+  padding:12px 14px;
+  display:flex; justify-content:flex-end; gap:10px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Fields */
+.field{ display:grid; gap:6px; margin-bottom:12px; }
+.field span{ color: var(--text-2); font-weight:600; }
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:10px 12px;
+  border-radius: var(--radius-md);
+  border:1px solid var(--border);
+  background:#0f1520;
+  color: var(--text); /* enforce */
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{ box-shadow: var(--ring); }
+
+/* Toasts */
+.toasts{
+  position:fixed; top: calc(10px + env(safe-area-inset-top));
+  left:0; right:0;
+  display:grid; gap:8px;
+  padding:0 14px;
+  z-index:100;
+}
+.toast{
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border:1px solid var(--border);
+  padding:10px 14px;
+  box-shadow: var(--shadow-1);
+  color: var(--text);
+}
+.toast.success{ box-shadow:0 0 0 2px var(--blue-glow); }
+.toast.error{ box-shadow:0 0 0 2px rgba(255,92,92,.3); }
+
+/* Icon buttons (e.g., modal X) */
+.icon-btn{
+  appearance:none; border:none; background:transparent;
+  padding:6px; border-radius:10px; color:var(--text);
+  display:inline-grid; place-items:center; cursor:pointer;
+}
+.icon-btn:hover{ background: rgba(255,255,255,.08); }
+.icon-btn svg{ width:18px; height:18px; display:block; }
+
+/* Accessibility */
+:focus-visible{ outline:none; box-shadow: var(--ring); }
+
+/* ========= Compact Controls Patch ========= */
+
+/* Stop buttons from stretching and shrink spacing */
+.card .row.wrap > .btn,
+.action-panel .row.wrap > .btn {
+  flex: 0 0 auto;     /* no auto-stretch */
+}
+
+.row { gap: 8px; }
+
+/* Smaller default button size */
+.btn {
+  padding: 8px 12px;
+  font-size: .9rem;
+  border-radius: 12px;
+}
+.btn.sm {
+  padding: 6px 10px;
+  font-size: .85rem;
+}
+
+/* Icons a touch smaller */
+.btn svg { width: 16px; height: 16px; }
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* Preset tiles tighter */
+.preset-grid { gap: 8px; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); }
+.preset-tile { padding: 10px 10px; }
+
+/* Timer card spacing */
+#active-timer-card { padding: 12px; }
+.big-count { font-size: 3.2rem; margin: 8px 0 2px; }
+#preset-label { margin-top: 2px; }
+
+/* Cards less chunky */
+.card { padding: 12px; }
+.action-panel { padding: 12px; }
+
+/* Make the big primary look sleek, not blocky */
+.btn.primary {
+  border-radius: 14px;
+  text-shadow: none;
+}
+
+/* Extra-compact on small screens */
+@media (max-width: 420px) {
+  .btn { padding: 7px 10px; font-size: .88rem; }
+  .btn svg { width: 15px; height: 15px; }
+  .preset-grid { grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); }
+  .big-count { font-size: 3rem; }
+}
