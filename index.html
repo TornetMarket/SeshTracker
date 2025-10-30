@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-hacker">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0f1420" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FocusUI" />
+  <title>FocusUI — Ritual Timer & Sesh Tracker</title>
+  <link rel="preload" href="style.css" as="style" />
+  <link rel="stylesheet" href="style.css" />
+  <noscript>FocusUI needs JavaScript to function. Please enable it.</noscript>
+</head>
+<body>
+  <!-- ======= SVG ICONS ======= -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <symbol id="ic-timer" viewBox="0 0 24 24">
+        <path d="M10 2h4"/><path d="M7 4h10"/>
+        <circle cx="12" cy="14" r="8"/><path d="M12 10v5l3 1.5"/>
+      </symbol>
+      <symbol id="ic-people" viewBox="0 0 24 24">
+        <circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="3"/>
+        <path d="M2 20a7 7 0 0 1 14 0"/><path d="M12 20a7 7 0 0 1 10 0"/>
+      </symbol>
+      <symbol id="ic-log" viewBox="0 0 24 24">
+        <path d="M7 3h10v18H7z"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h10"/>
+      </symbol>
+      <symbol id="ic-lightbulb" viewBox="0 0 24 24">
+        <path d="M9 18h6"/><path d="M10 22h4"/>
+        <path d="M2 10a10 10 0 0 1 20 0c0 3.31-2.69 6-6 6H8a6 6 0 0 1-6-6z"/>
+      </symbol>
+      <symbol id="ic-settings" viewBox="0 0 24 24">
+        <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.07a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.07c.62-.24 1.01-.85 1.01-1.49s-.39-1.27-1.01-1.51H3a2 2 0 0 1 0-4h.07c.62-.24 1.01-.85 1.01-1.49S3.46 4.27 2.84 4.03l-.06-.06A2 2 0 1 1 5.61 1.14l.06.06c.49.49 1.2.64 1.82.33H9c.66 0 1.27-.39 1.51-1.01V0a2 2 0 0 1 4 0v.07c.24.62.85 1.01 1.49 1.01h.07c.62.31 1.33.16 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.49.49-.64 1.2-.33 1.82V6c0 .66.39 1.27 1.01 1.51H21a2 2 0 0 1 0 4h-.07c-.62.24-1.01.85-1.01 1.49z"/>
+      </symbol>
+      <symbol id="ic-add" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="ic-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></symbol>
+      <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+      <symbol id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+      <symbol id="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></symbol>
+      <symbol id="ic-stop" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></symbol>
+      <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+      <symbol id="ic-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="ic-check" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></symbol>
+    </defs>
+  </svg>
 
+  <!-- ======= APP SHELL ======= -->
+  <div id="app" class="app-shell" role="application" aria-label="FocusUI">
+    <header class="topbar" role="banner">
+      <h1 class="topbar-title" id="route-title">FocusUI</h1>
+    </header>
+
+    <main id="content" class="content" role="main" tabindex="-1" aria-live="polite">
+      <!-- ========= TAB: TIMER ========= -->
+      <section id="tab-timer" class="tab-view is-active" role="region" aria-labelledby="timer-title">
+        <div class="section-header">
+          <h2 id="timer-title" class="section-title">Ritual Timer</h2>
+          <div class="subtitle">Choose wax, pick preset or set custom time, hit Start.</div>
+        </div>
+
+        <!-- Active Timer Card -->
+        <div class="card" id="active-timer-card" aria-live="polite">
+          <div class="timer-head row">
+            <div class="title" id="timer-wax-label">Wax: —</div>
+            <div class="spacer"></div>
+            <button class="btn ghost sm" id="btn-select-wax"><svg aria-hidden="true"><use href="#ic-edit"/></svg><span>Wax</span></button>
+          </div>
+          <div class="timer-display center">
+            <div class="big-count" id="countdown">00:00</div>
+            <div class="meta" id="preset-label">Preset: —</div>
+          </div>
+          <div class="row wrap" aria-label="Timer controls">
+            <button class="btn primary" id="btn-start"><svg aria-hidden="true"><use href="#ic-play"/></svg><span>Start</span></button>
+            <button class="btn" id="btn-pause"><svg aria-hidden="true"><use href="#ic-pause"/></svg><span>Pause</span></button>
+            <button class="btn" id="btn-stop"><svg aria-hidden="true"><use href="#ic-stop"/></svg><span>Reset</span></button>
+            <button class="btn ghost" id="btn-finish-dab"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>Log Dab</span></button>
+          </div>
+        </div>
+
+        <!-- Presets -->
+        <div class="action-panel">
+          <div class="row wrap">
+            <div class="action-copy">
+              <h3>Presets</h3>
+              <p class="muted small">Tap to load. Long-press to edit or delete (later).</p>
+            </div>
+            <div class="spacer"></div>
+            <button class="btn" id="btn-add-preset"><svg aria-hidden="true"><use href="#ic-add"/></svg><span>Custom</span></button>
+          </div>
+
+          <div id="preset-grid" class="preset-grid" aria-label="Preset durations">
+            <!-- Filled by script with defaults like Live Resin / Rosin / Shatter etc. -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ========= TAB: SESH ========= -->
+      <section id="tab-sesh" class="tab-view" role="region" aria-labelledby="sesh-title" hidden>
+        <div class="section-header">
+          <h2 id="sesh-title" class="section-title">Sesh Mode</h2>
+          <div class="subtitle">Track multi-user sessions — names, dabs, wax used.</div>
+        </div>
+
+        <div class="card">
+          <div class="row wrap">
+            <button class="btn primary" id="btn-new-sesh"><svg aria-hidden="true"><use href="#ic-add"/></svg><span>Start Sesh</span></button>
+            <button class="btn" id="btn-resume-sesh" hidden><svg aria-hidden="true"><use href="#ic-play"/></svg><span>Resume</span></button>
+            <button class="btn danger" id="btn-end-sesh" hidden><svg aria-hidden="true"><use href="#ic-stop"/></svg><span>End Sesh</span></button>
+          </div>
+          <div id="sesh-summary" class="meta" aria-live="polite">No active sesh.</div>
+        </div>
+
+        <!-- Active Sesh Board -->
+        <div id="sesh-board" class="reveal-area" hidden>
+          <div class="list-toolbar">
+            <div class="subtitle">Players</div>
+            <div class="spacer"></div>
+            <button class="btn ghost sm" id="btn-sesh-add-player"><svg aria-hidden="true"><use href="#ic-add"/></svg><span>Add Player</span></button>
+          </div>
+
+          <ul id="player-list" class="card-list" aria-label="Players and counters">
+            <!-- Script renders: each player card with dab count + +1 button -->
+          </ul>
+
+          <div class="row wrap" style="margin-top:8px">
+            <button class="btn" id="btn-sesh-wax"><svg aria-hidden="true"><use href="#ic-edit"/></svg><span>Wax Used</span></button>
+            <button class="btn primary" id="btn-sesh-log-dab"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>+1 Dab (Active)</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========= TAB: LOG ========= -->
+      <section id="tab-log" class="tab-view" role="region" aria-labelledby="log-title" hidden>
+        <div class="section-header">
+          <h2 id="log-title" class="section-title">History & Stats</h2>
+          <div class="subtitle">Solo and sesh logs. Totals by wax and time spent.</div>
+        </div>
+
+        <div class="card">
+          <div class="row wrap">
+            <div class="title">At a glance</div>
+          </div>
+          <div class="row wrap">
+            <div class="stat-chip">
+              <div class="stat-value" id="stat-total-dabs">0</div>
+              <div class="stat-label">Total dabs</div>
+            </div>
+            <div class="stat-chip">
+              <div class="stat-value" id="stat-total-mins">0</div>
+              <div class="stat-label">Minutes timed</div>
+            </div>
+            <div class="stat-chip">
+              <div class="stat-value" id="stat-most-wax">—</div>
+              <div class="stat-label">Most used wax</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row wrap">
+            <div class="title">Recent Logs</div>
+            <div class="spacer"></div>
+            <button class="btn ghost sm" id="btn-clear-logs"><svg aria-hidden="true"><use href="#ic-trash"/></svg><span>Clear</span></button>
+          </div>
+          <ul id="log-list" class="card-list" aria-label="Recent activity logs">
+            <!-- Script will render -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- ========= TAB: FACTS ========= -->
+      <section id="tab-facts" class="tab-view" role="region" aria-labelledby="facts-title" hidden>
+        <div class="section-header">
+          <h2 id="facts-title" class="section-title">Cool Facts</h2>
+          <div class="subtitle">Tips, glass care, heat science, safety, flavor notes.</div>
+        </div>
+
+        <div class="card">
+          <ul id="facts-list" class="card-list">
+            <!-- Script seeds a rotating list of facts; you can add more later -->
+          </ul>
+          <div class="row end" style="margin-top:8px">
+            <button class="btn" id="btn-shuffle-facts"><svg aria-hidden="true"><use href="#ic-lightbulb"/></svg><span>Shuffle</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========= TAB: SETTINGS ========= -->
+      <section id="tab-settings" class="tab-view" role="region" aria-labelledby="settings-title" hidden>
+        <div class="section-header">
+          <h2 id="settings-title" class="section-title">Settings</h2>
+          <div class="subtitle">Sounds, haptics, auto-log, data.</div>
+        </div>
+
+        <div class="card">
+          <div class="field two">
+            <label class="field">
+              <span>Finish Sound</span>
+              <select id="opt-sound">
+                <option value="none">None</option>
+                <option value="ding">Ding</option>
+                <option value="bell">Bell</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Haptic Feel (simulate)</span>
+              <select id="opt-haptics">
+                <option value="off">Off</option>
+                <option value="light">Light</option>
+                <option value="medium">Medium</option>
+                <option value="heavy">Heavy</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field two">
+            <label class="field">
+              <span>Default Wax</span>
+              <select id="opt-default-wax"></select>
+            </label>
+            <label class="field">
+              <span>Auto-log Solo Dabs</span>
+              <select id="opt-autolog">
+                <option value="on">On</option>
+                <option value="off">Off</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="row wrap">
+            <button class="btn" id="btn-export"><svg aria-hidden="true"><use href="#ic-log"/></svg><span>Export Data</span></button>
+            <button class="btn danger" id="btn-wipe"><svg aria-hidden="true"><use href="#ic-trash"/></svg><span>Wipe All</span></button>
+          </div>
+        </div>
+
+        <details class="card">
+          <summary class="title">About</summary>
+          <p class="meta">FocusUI is a local-only web app that feels native on iPhone. Data is stored on this device. No servers.</p>
+        </details>
+      </section>
+    </main>
+
+    <!-- ======= BOTTOM TAB BAR ======= -->
+    <nav class="tabbar" role="tablist" aria-label="Primary">
+      <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-timer" data-tab="timer">
+        <svg aria-hidden="true"><use href="#ic-timer"/></svg><span>Timer</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-sesh" data-tab="sesh">
+        <svg aria-hidden="true"><use href="#ic-people"/></svg><span>Sesh</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-log" data-tab="log">
+        <svg aria-hidden="true"><use href="#ic-log"/></svg><span>Log</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-facts" data-tab="facts">
+        <svg aria-hidden="true"><use href="#ic-lightbulb"/></svg><span>Facts</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-settings" data-tab="settings">
+        <svg aria-hidden="true"><use href="#ic-settings"/></svg><span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ======= DIALOGS / SHEETS ======= -->
+
+  <!-- Add / Edit Preset -->
+  <dialog id="preset-modal" class="modal" aria-labelledby="preset-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="preset-title">Custom Preset</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="preset-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <div class="field">
+        <span>Preset Name</span>
+        <input id="preset-name" type="text" placeholder="e.g., Live Resin — Hot Banger" />
+      </div>
+      <div class="field two">
+        <label class="field">
+          <span>Minutes</span>
+          <input id="preset-min" type="number" min="0" max="59" value="1" />
+        </label>
+        <label class="field">
+          <span>Seconds</span>
+          <input id="preset-sec" type="number" min="0" max="59" value="30" />
+        </label>
+      </div>
+      <div class="field">
+        <span>Wax Type</span>
+        <select id="preset-wax"></select>
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="preset-modal">Cancel</button>
+      <button class="btn primary" id="btn-save-preset"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>Save</span></button>
+    </footer>
+  </dialog>
+
+  <!-- Select Wax -->
+  <dialog id="wax-modal" class="modal" aria-labelledby="wax-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="wax-title">Select Wax</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="wax-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <div class="field">
+        <span>Wax</span>
+        <select id="wax-select"></select>
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="wax-modal">Cancel</button>
+      <button class="btn primary" id="btn-apply-wax"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>Apply</span></button>
+    </footer>
+  </dialog>
+
+  <!-- New Sesh Setup -->
+  <dialog id="sesh-setup-modal" class="modal" aria-labelledby="sesh-setup-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="sesh-setup-title">Start Sesh</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="sesh-setup-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <div class="field">
+        <span>Sesh Name (optional)</span>
+        <input id="sesh-name" type="text" placeholder="e.g., Friday Night Heat" />
+      </div>
+      <div class="field">
+        <span>Players (comma-separated)</span>
+        <input id="sesh-players" type="text" placeholder="Richie, Partner" />
+      </div>
+      <div class="field">
+        <span>Wax Used</span>
+        <select id="sesh-wax-initial"></select>
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="sesh-setup-modal">Cancel</button>
+      <button class="btn primary" id="btn-sesh-create"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>Create</span></button>
+    </footer>
+  </dialog>
+
+  <!-- Add Player -->
+  <dialog id="player-modal" class="modal" aria-labelledby="player-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="player-title">Add Player</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="player-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <div class="field">
+        <span>Player Name</span>
+        <input id="player-name" type="text" placeholder="e.g., Richie" />
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="player-modal">Cancel</button>
+      <button class="btn primary" id="btn-player-add"><svg aria-hidden="true"><use href="#ic-check"/></svg><span>Add</span></button>
+    </footer>
+  </dialog>
+
+  <!-- End Sesh Confirm -->
+  <dialog id="end-sesh-modal" class="modal" aria-labelledby="end-sesh-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="end-sesh-title">End Sesh?</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="end-sesh-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <p>Save results and stop tracking? This will log totals to History.</p>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="end-sesh-modal">Cancel</button>
+      <button class="btn danger" id="btn-end-sesh-confirm"><svg aria-hidden="true"><use href="#ic-stop"/></svg><span>End Sesh</span></button>
+    </footer>
+  </dialog>
+
+  <!-- Wipe All Data -->
+  <dialog id="wipe-modal" class="modal" aria-labelledby="wipe-title" aria-modal="true">
+    <header class="modal-header">
+      <h3 id="wipe-title">Delete All Data?</h3>
+      <div class="spacer"></div>
+      <button class="icon-btn" data-close="wipe-modal" aria-label="Close"><svg><use href="#ic-close"/></svg></button>
+    </header>
+    <div class="modal-body">
+      <p>This will erase presets, logs, sessions, and settings on this device. No undo.</p>
+    </div>
+    <footer class="modal-footer">
+      <button class="btn ghost" data-close="wipe-modal">Cancel</button>
+      <button class="btn danger" id="btn-wipe-confirm"><svg aria-hidden="true"><use href="#ic-trash"/></svg><span>Wipe All</span></button>
+    </footer>
+  </dialog>
+
+  <!-- Toasts -->
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+  <!-- SCRIPTS -->
+  <script src="script.js" defer></script>
+</body>
+</html>
